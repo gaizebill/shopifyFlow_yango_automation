@@ -1,0 +1,26 @@
+Define inputs:
+
+query {
+  order {
+    shippingAddress {
+      phone
+    }
+  }
+}
+
+Write code:
+export default function main(input) {
+  let phoneNumber = input.order.shippingAddress.phone;
+  if (!phoneNumber.startsWith('+260')) {
+    phoneNumber = '+260' + phoneNumber;
+  }
+  return {
+    processedPhoneNumber: phoneNumber
+  };
+}
+
+Define outputs:
+type Output {
+  "The processed phone number with country code"
+  processedPhoneNumber: String!
+}

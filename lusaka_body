@@ -1,0 +1,75 @@
+{
+  "client_requirements": {
+    "taxi_class": "courier"
+  },
+  "comment": "TEST",
+  "emergency_contact": {
+    "name": "{{ shop.name }}",
+    "phone": "+260760326005"
+  },
+  "items": [
+    {
+      "cost_currency": "ZMW",
+      "cost_value": "{{ order.totalPriceSet.presentmentMoney.amount }}",
+      "droppof_point": 2,
+      "pickup_point": 1,
+      "quantity": 1,
+      "title": "{% assign item_names = order.lineItems | map: 'name' | join: ', ' %}{{ item_names }}"
+    }
+  ],
+  "optional_return": false,
+  "referral_source": "shopify_flow_automation",
+  "route_points": [
+    {
+      "address": {
+        "comment": "Wait for the parcel outside store",
+        "country": "Zambia",
+        "city": "Lusaka",
+        "coordinates": [
+          {% for fulfillmentServices_item in shop.fulfillmentServices %}{{fulfillmentServices_item.location.address.longitude}}{% endfor %},
+          {% for fulfillmentServices_item in shop.fulfillmentServices %}{{fulfillmentServices_item.location.address.latitude}}{% endfor %}
+        ],
+        "description": "NAME OF THE STORE OR ANY SPECIAL INFO",
+        "fullname": "{{fulfillment.location.address.address1}}",
+        "shortname": "STORE NAME"
+      },
+      "contact": {
+        "email": "{{ shop.contactEmail }}",
+        "name": "{{ shop.name }}",
+        "phone": "{{runCode.processedPhoneNumber}}"
+      },
+      "external_order_id": "{{ order.name }}",
+      "leave_under_door": true,
+      "meet_outside": false,
+      "no_door_call": true,
+      "point_id": 1,
+      "skip_confirmation": true,
+      "type": "source",
+      "visit_order": 1
+    },
+    {
+      "address": {
+        "street": "{{ order.displayAddress.address1 }}",
+        "city": "Lusaka",
+        "country": "Zambia",
+"coordinates": [{{order.shippingAddress.longitude}},{{order.shippingAddress.latitude}}],
+        "fullname": "{{ order.shippingAddress.address1 }}",
+        "comment": "{{ order.shippingAddress.address2 }}"
+      },
+      "contact": {
+        "name": "{{ order.shippingAddress.firstName }} {{ order.shippingAddress.lastName }}",
+        "phone": "{{runCode.processedPhoneNumber}}"
+      },
+"external_order_id": "{{ order.name }}",
+      "skip_confirmation": true,
+      "type": "destination",
+      "pickup_point": 2,
+      "point_id": 2,
+      "visit_order": 2
+    }
+  ],
+  "skip_act": true,
+  "skip_client_notify": false,
+  "skip_door_to_door": true,
+  "skip_emergency_notify": true
+}
